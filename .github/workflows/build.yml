@@ -26,6 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        # যদি আপনার প্রজেক্ট কোনো সাব-ফোল্ডারে থাকে, তবে working-directory: 'ফোল্ডারের_নাম' বসিয়ে দিন
 
       - name: Build APK
         run: flutter build apk --release
