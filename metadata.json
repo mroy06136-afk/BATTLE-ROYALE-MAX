@@ -1,0 +1,6 @@
+{
+  "name": "BATTLE ROYALE MAX",
+  "description": "3D multiplayer Battle Royale survival shooting game with 50-player matches, parachute drop, vehicles, realistic weapons, shrinking safe zone, and tactical combat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
