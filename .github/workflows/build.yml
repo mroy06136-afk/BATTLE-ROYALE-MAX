@@ -20,12 +20,14 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew || true
+        # যদি আপনার প্রজেক্ট কোনো সাব-ফোল্ডারে থাকে, তবে নিচে working-directory যোগ করে ফোল্ডারের নাম দিতে হবে
 
       - name: Build APK with Gradle
-        run: ./gradlew assembleRelease || gradle assembleRelease
+        run: ./gradlew assembleRelease
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
           path: app/build/outputs/apk/release/app-release.apk
+          
