@@ -1,10 +1,11 @@
 
-name: Build Android APK
+name: BATTLE-ROYALE-MAX APK Build
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -12,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build APK
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
@@ -25,19 +26,29 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Read Gradle Version
+        id: gradle-version
+        shell: bash
+        run: |
+          if [ -f gradle/wrapper/gradle-wrapper.properties ]; then
+            VERSION=$(grep 'distributionUrl=' gradle/wrapper/gradle-wrapper.properties | grep -oE 'gradle-[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1 | sed 's/gradle-//')
+          fi
+          VERSION=${VERSION:-8.9}
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ steps.gradle-version.outputs.version }}
 
-      - name: Prepare Gradle
-        run: chmod +x ./gradlew
+      - name: Build Debug APK
+        run: |
+          gradle :app:assembleDebug --stacktrace
 
-      - name: Build Android APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Upload APK
+      - name: Upload Game APK
         uses: actions/upload-artifact@v4
         with:
           name: BATTLE-ROYALE-MAX-APK
-          path: app/build/outputs/apk/debug/*.apk
+          path: '**/build/outputs/apk/debug/*.apk'
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
